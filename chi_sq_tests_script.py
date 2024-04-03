@@ -36,7 +36,7 @@ def thread_worker():
         chi_sq_tests[thread_row][thread_col] = test_results[1]  # load p-values into the grid
         # progress
         amount_completed = 100*((len(cat_vars.columns)*CURR_COL+CURR_ROW)/len(cat_vars.columns)**2)
-        print("row:", CURR_ROW, 
+        print(" row:", CURR_ROW, 
               "col:", CURR_COL, 
               "Progress: {:.2f}%".format(amount_completed),
               end="\r") 
