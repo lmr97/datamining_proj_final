@@ -43,12 +43,30 @@ def thread_worker():
 print("Loading data...")
 df = pd.read_csv("survey_results_public.csv")
 
+# dropping the labels that hang up calculation and seem irelevant
+# to the person's personality long-term
+# these are my candiates
+# df.drop(labels=['Country','CurrencyDesc',
+#        'CurrencySymbol', 'Employment', 'DatabaseDesireNextYear', 'DatabaseWorkedWith',
+#        'LanguageDesireNextYear', 'LanguageWorkedWith',
+#        'MiscTechDesireNextYear', 'MiscTechWorkedWith',
+#        'NEWCollabToolsDesireNextYear', 'NEWCollabToolsWorkedWith', 
+#        'PlatformDesireNextYear',
+#        'PlatformWorkedWith','WebframeDesireNextYear',
+#        'WebframeWorkedWith'], 
+#        inplace=True, axis=1)
+
+# a random sample of 2000 (w/o replacemnt) will give us the insight we need
+# I don't think we need all 68k+ datapoints
+df = df.sample(3000, random_state=6787)   
+
 cat_vars = df.drop(['Respondent', 
                     'Age', 
                     'CompTotal', 
                     'ConvertedComp',
                     'WorkWeekHrs'], 
                     axis=1)
+
 cat_vars = pd.DataFrame(cat_vars, dtype=str)  
 
 chi_sq_tests = np.zeros((len(cat_vars.columns),len(cat_vars.columns)))
