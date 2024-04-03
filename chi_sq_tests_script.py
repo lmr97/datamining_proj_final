@@ -10,15 +10,13 @@ import threading
 
 global NUM_THREADS
 global LOCK
-global CURR_ROW
 
-NUM_THREADS = 4
+NUM_THREADS = 4   # this can be changed to suit your machine
 LOCK = threading.Lock()
-CURR_ROW = 0
 
 def thread_worker():
-    global CURR_ROW
     global CURR_COL
+    global CURR_ROW
     while(CURR_ROW < len(cat_vars.columns)):
         LOCK.acquire()
         thread_row = CURR_ROW
@@ -58,9 +56,17 @@ chi_sq_tests = np.zeros((len(cat_vars.columns),len(cat_vars.columns)))
 print("Calculating chi-squared values...\n")
 # multithreading
 for i, label in enumerate(cat_vars.columns):
+
+    # tell the interpreter that this is, in fact the global variables
+    # I am using
     global CURR_COL
+    global CURR_ROW
+
+    # reset variables
     CURR_COL = i
+    CURR_ROW = 0
     all_threads = []
+
     for j in range(NUM_THREADS):
         all_threads.append(threading.Thread(target=thread_worker, daemon=True))
 
@@ -76,6 +82,6 @@ for i, label in enumerate(cat_vars.columns):
 chi_sq_tests = pd.DataFrame(chi_sq_tests, 
                             columns=cat_vars.columns, 
                             index=cat_vars.columns)
-#chi_sq_tests.to_csv('chi_sq_tests.csv')
-round(chi_sq_tests,2).to_csv('chi_sq_tests.csv')
+
+round(chi_sq_tests,3).to_csv('chi_sq_tests.csv')
 print("\nProcess complete and file exported.")
