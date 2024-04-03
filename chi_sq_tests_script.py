@@ -14,8 +14,10 @@ cat_vars = df.drop(['Respondent',
                     'ConvertedComp',
                     'WorkWeekHrs'], 
                     axis=1)
+cat_vars = pd.DataFrame(cat_vars, dtype=str)  
 
 chi_sq_tests = np.zeros((len(cat_vars.columns),len(cat_vars.columns)))
+
 for i, rows in enumerate(cat_vars.columns):
     for j, cols in enumerate(cat_vars.columns):
         
